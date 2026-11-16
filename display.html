@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User Details</title>
+<style>
+  :root { --ink:#1d2a2f; --muted:#5d6b70; --line:#c9d3d6; --bg:#eef3f4; --card:#fff; --accent:#0f6e7a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Georgia,"Times New Roman",serif; background:var(--bg); color:var(--ink); padding:24px 16px; }
+  .card { max-width:640px; margin:0 auto; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:32px; }
+  h1 { margin:0 0 20px; font-size:1.7rem; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:12px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { width:40%; color:var(--muted); font-weight:normal; }
+  td { font-weight:bold; overflow-wrap:anywhere; }
+  a.btn { display:inline-block; margin-top:22px; padding:11px 22px; border:1px solid var(--accent); border-radius:4px; color:var(--accent); text-decoration:none; }
+  a.btn:focus, a.btn:hover { background:var(--accent); color:#fff; }
+  .empty { color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Your details</h1>
+  <div id="output"></div>
+  <a class="btn" href="index.html">Edit details</a>
+</div>
+
+<script>
+  const fields = [
+    ["name", "Name"], ["gender", "Gender"], ["mobile", "Mobile number"],
+    ["email", "Email ID"], ["city", "City"], ["state", "State"], ["country", "Country"]
+  ];
+  const params = new URLSearchParams(window.location.search);
+  const out = document.getElementById("output");
+
+  if (!fields.some(([key]) => params.get(key))) {
+    out.innerHTML = '<p class="empty">No details found. Go back and fill in the form first.</p>';
+  } else {
+    const table = document.createElement("table");
+    fields.forEach(([key, label]) => {
+      const tr = table.insertRow();
+      const th = document.createElement("th");
+      th.textContent = label;
+      tr.appendChild(th);
+      const td = tr.insertCell();
+      td.textContent = params.get(key) || "-";   // textContent keeps user input safe from HTML injection
+    });
+    out.appendChild(table);
+  }
+</script>
+</body>
+</html>
